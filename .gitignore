@@ -1,0 +1,7 @@
+node_modules
+dist
+test
+yarn-error.log
+linkedin-profile-filter-*.zip
+manifest.json
+config.json

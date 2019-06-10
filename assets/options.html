@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="pure-min.css">
+  <title>LinkedIn Profile Filter options</title>
+</head>
+
+<body>
+  <div class="pure-g" style="max-width: 768px; margin: 0 auto;">
+    <div class="pure-u-1-1">
+      <h1>LinkedIn Profile Filter</h1>
+      <form class="pure-form pure-form-aligned">
+        <fieldset>
+          <div class="pure-control-group">
+            <label for="sheet-id">Google Sheet ID</label>
+            <input id="sheet-id" type="text" placeholder="Sheet ID">
+          </div>
+
+          <div class="pure-control-group">
+            <label for="company-name-range">Company name range</label>
+            <input id="company-name-range" type="text"
+              placeholder="e.g. Sheet1!A1:A">
+          </div>
+
+          <div class="pure-control-group">
+            <label for="company-location-range">Company location range</label>
+            <input id="company-location-range" type="text"
+              placeholder="e.g. Sheet1!B1:B">
+          </div>
+
+          <div class="pure-control-group">
+            <label for="company-tier-range">Company tier range</label>
+            <input id="company-tier-range" type="text"
+              placeholder="e.g. Sheet1!C1:C">
+          </div>
+
+          <div class="pure-control-group">
+            <label for="cache-timeout">Cache timeout</label>
+            <input id="cache-timeout" type="number" placeholder="in minutes">
+            <button id="clear-cache"
+              class="pure-button pure-button-secondary">Clear cache</button>
+          </div>
+
+          <div class="pure-controls">
+            <label id="save-status" for="save" class="pure-checkbox"></label>
+            <button id="save" type="submit"
+              class="pure-button pure-button-primary">Submit</button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+
+</html>
