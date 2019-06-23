@@ -88,7 +88,7 @@ async function handleSearch(body) {
   const options = await getOptions();
   const criteria = await getCriteria(options);
   const matches = criteria.filter(c => c.name.toLowerCase() === body.company.toLowerCase()
-  || c.altNames.includes(body.company.toLowerCase()))
+  || c.altNames.find(alt => new RegExp(alt).test(body.company.toLowerCase())))
     .map((c) => {
       const criteriaIsoLocation = isoCountryMap[c.location.toUpperCase()]
         ? c.location

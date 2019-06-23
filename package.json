@@ -1,6 +1,6 @@
 {
   "name": "linkedin-profile-filter",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Profile Filter for LinkedIn",
   "main": "background.js",
   "scripts": {

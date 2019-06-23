@@ -10,21 +10,47 @@ export class ProfilePageScrape {
    * @returns {string}
    */
   get name() {
-    return this.document.querySelector('.pv-top-card-section__name').textContent;
+    const nameElem = this.document.querySelector('.inline.t-24.t-black.t-normal.break-words');
+    if (!nameElem) {
+      return;
+    }
+    return nameElem.textContent.trim();
   }
 
   /**
    * @returns {string}
    */
   get location() {
-    return this.document.querySelector('.pv-top-card-section__location').textContent;
+    const locElem = this.document.querySelector('.t-16.t-black.t-normal.inline-block');
+    if (!locElem) {
+      return;
+    }
+    const splitLoc = locElem.textContent.split(',');
+
+    return splitLoc[splitLoc.length - 1].trim().toLowerCase();
   }
 
   /**
    * @returns {string}
    */
   get company() {
-    return this.document.querySelector('.pv-top-card-v2-section__company-name').textContent;
+    const experienceElem = this.document.querySelector('.experience-section');
+    if (!experienceElem) {
+      return;
+    }
+    const lastPosElem = experienceElem.querySelector('.pv-profile-section__list-item');
+    if (!lastPosElem) {
+      return;
+    }
+    const posDateElem = lastPosElem.querySelector('.pv-entity__date-range');
+    if (!posDateElem || !posDateElem.textContent.toLowerCase().includes('present')) {
+      return;
+    }
+    const posNameElem = lastPosElem.querySelector('.pv-entity__secondary-title');
+    if (!posNameElem) {
+      return;
+    }
+    return posNameElem.textContent.trim();
   }
 }
 
@@ -134,5 +160,42 @@ export class RecruiterProfilePageScrape {
       return null;
     }
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  }
+}
+
+export class RecruiterSearchPageScrape {
+  constructor(resultElem) {
+    this.resultElem = resultElem;
+  }
+
+  get name() {
+    const nameElem = this.resultElem.querySelector('.name');
+    if (!nameElem) {
+      return;
+    }
+    return nameElem.textContent;
+  }
+
+  get location() {
+    const locElem = this.resultElem.querySelector('.location');
+    if (!locElem) {
+      return;
+    }
+    const locNameElem = locElem.querySelector('span');
+    if (!locNameElem) {
+      return;
+    }
+    const splitLoc = locNameElem.textContent.split(',');
+
+    return splitLoc[splitLoc.length - 1].trim().toLowerCase();
+  }
+
+  get company() {
+    const posElem = this.resultElem.querySelector('.curr-positions ol li');
+    if (!posElem) {
+      return;
+    }
+    const posStr = Array.from(posElem.childNodes).slice(0, -1).map(n => n.textContent).join('');
+    return posStr.split(' at ')[1];
   }
 }

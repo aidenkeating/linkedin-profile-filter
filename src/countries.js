@@ -248,7 +248,7 @@ const isoCountryMap = {
 
 const countryIsoMap = {};
 Object.keys(isoCountryMap).forEach((key) => {
-  const val = isoCountryMap[key];
+  const val = isoCountryMap[key].toLowerCase();
   countryIsoMap[val] = key;
 });
 

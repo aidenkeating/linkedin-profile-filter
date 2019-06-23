@@ -41,17 +41,13 @@ function handleMessageResponse(msg) {
 }
 
 // Initialize
-let loading = true;
-const profileScraper = new RecruiterProfilePageScrape(document);
 const messenger = new ChromeMessenger();
-
-const observer = new MutationObserver(async () => {
-  if (loading && (!profileScraper.name || !profileScraper.location
-    || !profileScraper.company)) {
+async function scrapePage(messenger) {
+  const profileScraper = new RecruiterProfilePageScrape(document);
+  if (!profileScraper.name || !profileScraper.location
+    || !profileScraper.company) {
     return;
   }
-  // NOTE: loading is so hacky
-  loading = false;
 
   try {
     const results = await messenger.search({
@@ -63,7 +59,7 @@ const observer = new MutationObserver(async () => {
   } catch (err) {
     console.error('Failed to check profile', err);
   }
-});
-observer.observe(document, {
-  childList: true, subtree: true, attributes: true, characterData: true,
-});
+}
+
+setInterval(scrapePage.bind(null, messenger), 100);
+scrapePage(messenger);
