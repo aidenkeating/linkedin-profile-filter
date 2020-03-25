@@ -11,7 +11,7 @@ export default class ChromeMessenger {
    * @param {Object} opts
    * @param {string} opts.name Name on the LinkedIn profile.
    * @param {string} opts.location Location of the LinkedIn profile.
-   * @param {string} opts.company Company name of the LinkedIn profile.
+   * @param {string[]} opts.company Company name of the LinkedIn profile.
    */
   async search(opts) {
     return new Promise((resolve, reject) => this.producer.sendMessage({
@@ -19,7 +19,7 @@ export default class ChromeMessenger {
       body: opts,
     }, (resp) => {
       if (!resp || resp.error) {
-        reject(resp.error || new Error('Received an empty response'));
+        reject(resp && resp.error ? resp.error : new Error('Received an empty response'));
         return;
       }
       resolve(resp);

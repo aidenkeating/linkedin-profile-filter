@@ -1,12 +1,12 @@
 {
   "name": "linkedin-profile-filter",
-  "version": "0.5.0",
+  "version": "0.10.0",
   "description": "Profile Filter for LinkedIn",
   "main": "background.js",
   "scripts": {
     "lint:js": "eslint ./**/*.js",
-    "build:dev": "gulp",
-    "build": "gulp dist",
+    "build": "rollup -c",
+    "build:prod": "rollup -c && zip -vr linkedin-profile-filter.zip _build -x '*.DS_Store'",
     "test": "gulp test"
   },
   "author": "Aiden Keating <akeating@redhat.com>",
@@ -29,13 +29,17 @@
     "gulp-tape": "^1.0.0",
     "gulp-zip": "^5.0.0",
     "jsdom": "^15.1.1",
-    "tape": "^4.10.2",
+    "rollup-plugin-copy": "^3.3.0",
+    "tape": "^4.13.2",
     "tape-async": "^2.3.0",
     "tape-promise": "^4.0.0",
-    "webpack-cli": "^3.3.3",
+    "webpack-cli": "^3.3.11",
     "webpack-stream": "^5.2.1"
   },
   "dependencies": {
-    "@babel/runtime": "^7.4.5"
+    "@babel/runtime": "^7.4.5",
+    "@rollup/plugin-json": "^4.0.2",
+    "browserify": "^16.5.0",
+    "global": "^4.4.0"
   }
 }

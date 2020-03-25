@@ -168,7 +168,7 @@ export class FilterCriteriaClient {
     this.sheetsClient = sheetsClient;
     this.readOptions = readOptions;
     // NOTE: This should be a param.
-    this.tierWhitelist = ['Premier', 'Advanced', 'Affiliated', 'Ready'];
+    this.tierBlacklist = ['Unaffiliated'];
     // NOTE: This should be a param.
     this.nameParser = new CompanyNameParser();
   }
@@ -202,7 +202,7 @@ export class FilterCriteriaClient {
 
     return nameVals.map((_, i) => {
       if (!nameVals[i][0] || !locVals[i][0] || !tierVals[i][0]
-        || !this.tierWhitelist.includes(tierVals[i][0])) {
+        || this.tierBlacklist.includes(tierVals[i][0])) {
         return null;
       }
       const altNames = this.nameParser.getAltNamesFor(nameVals[i][0]);

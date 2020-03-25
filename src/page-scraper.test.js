@@ -40,7 +40,7 @@ test('ensure recruiter profile scraper retrieves primary data if available', asy
   const scrape = new RecruiterProfilePageScrape(goodDoc);
 
   t.equals(scrape.name, 'Aiden Keating');
-  t.equals(scrape.company, 'Red Hat');
+  t.equals(scrape.company[0], 'Red Hat');
   t.equals(scrape.location, 'us');
 });
 
@@ -48,6 +48,6 @@ test('ensure recruiter profile scraper retrieves fallback data if primary is not
   const scrape = new RecruiterProfilePageScrape(fallbackDoc);
 
   t.equals(scrape.name, null);
-  t.equals(scrape.company, 'Red Hat');
+  t.equals(scrape.company.length, 0);
   t.equals(scrape.location, 'United States');
 });

@@ -1,7 +1,9 @@
 node_modules
 dist
+_build
 test
 yarn-error.log
-linkedin-profile-filter-*.zip
+linkedin-profile-filter.zip
 manifest.json
 config.json
+.DS_Store

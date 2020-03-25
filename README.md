@@ -42,7 +42,16 @@ The first time the extension is installed you will be asked for Google Sheets
 permissions. These are read-only permissions and allow the extension to read
 the specified Google Sheet when it needs to.
 
-## TODO
+## Publishing as an extension
 
-- [ ] Complete standard LinkedIn profile integration.
-- [ ] Use modules and compile/build the background and content scripts.
+Request access to the extension Google Group. This will give you publishing
+permissions.
+
+Ensure a version bump of `manifest.json` and `package.json` have been done.
+The Chrome dashboard will reject attempted updates whose version conflicts with
+a previous release of the extension.
+
+Run `yarn build:prod`.
+
+Upload the resulting `zip` file through the Chrome Extension dashboard. This
+will take about 30 minutes to become available to new testers.

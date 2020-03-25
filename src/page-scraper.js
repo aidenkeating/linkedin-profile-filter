@@ -36,21 +36,21 @@ export class ProfilePageScrape {
   get company() {
     const experienceElem = this.document.querySelector('.experience-section');
     if (!experienceElem) {
-      return;
+      return [];
     }
     const lastPosElem = experienceElem.querySelector('.pv-profile-section__list-item');
     if (!lastPosElem) {
-      return;
+      return [];
     }
     const posDateElem = lastPosElem.querySelector('.pv-entity__date-range');
     if (!posDateElem || !posDateElem.textContent.toLowerCase().includes('present')) {
-      return;
+      return [];
     }
     const posNameElem = lastPosElem.querySelector('.pv-entity__secondary-title');
     if (!posNameElem) {
-      return;
+      return [];
     }
-    return posNameElem.textContent.trim();
+    return [posNameElem.textContent.trim()];
   }
 }
 
@@ -102,19 +102,23 @@ export class RecruiterProfilePageScrape {
   }
 
   get company() {
-    const prevPositionElem = this.document.querySelector('.position');
-    if (!prevPositionElem) {
-      return this.getFallbackCompany();
+    const prevPositionElems = this.document.querySelectorAll('.position');
+    if (!prevPositionElems) {
+      return [];
     }
-    const prevPositionInfoElems = prevPositionElem.querySelectorAll('.searchable');
-    if (!prevPositionInfoElems || prevPositionInfoElems.length < 2) {
-      return this.getFallbackCompany();
-    }
-    const prevPositionDateElem = this.document.querySelector('.position').querySelector('.date-range');
-    if (!prevPositionDateElem || !prevPositionDateElem.textContent.toLowerCase().includes('present')) {
-      return this.getFallbackCompany();
-    }
-    return prevPositionInfoElems[1].textContent;
+    const companies = Array.from(prevPositionElems).reduce((acc, prevPositionElem) => {
+      const prevPositionInfoElems = prevPositionElem.querySelectorAll('.searchable');
+      if (!prevPositionInfoElems || prevPositionInfoElems.length < 2) {
+        return acc;
+      }
+      const prevPositionDateElem = prevPositionElem.querySelector('.date-range');
+      if (!prevPositionDateElem || !prevPositionDateElem.textContent.toLowerCase().includes('present')) {
+        return acc;
+      }
+      acc.push(prevPositionInfoElems[1].textContent);
+      return acc;
+    }, []);
+    return companies;
   }
 
   /**
@@ -191,11 +195,35 @@ export class RecruiterSearchPageScrape {
   }
 
   get company() {
-    const posElem = this.resultElem.querySelector('.curr-positions ol li');
-    if (!posElem) {
+    const posElems = this.resultElem.querySelectorAll('.curr-positions ol li');
+    if (!posElems) {
       return;
     }
-    const posStr = Array.from(posElem.childNodes).slice(0, -1).map(n => n.textContent).join('');
-    return posStr.split(' at ')[1];
+    const companies = Array.from(posElems).reduce((acc, posElem) => {
+      let positionTextNodes = Array.from(posElem.childNodes);
+      if (positionTextNodes.length === 0) {
+        return acc;
+      }
+      if (positionTextNodes[positionTextNodes.length - 1].textContent.toLowerCase().includes(' present')) {
+        positionTextNodes = positionTextNodes.slice(0, -1);
+      }
+
+      const posCompanyAtStr = positionTextNodes.map(n => n.textContent).join('');
+      acc.push(posCompanyAtStr.split(' at ')[1]);
+      return acc;
+    }, []);
+    return companies;
   }
+}
+
+export function genScrapeId(r) {
+  return window.btoa(encodeURIComponent(`${r.name} ${r.company} ${r.location}`));
+}
+
+export function genMatchDiv(r, s) {
+  const elem = document.createElement('div');
+  elem.id = genScrapeId(s);
+  elem.style = 'color: white; border-radius: 16px; border: 3px solid #d9534f; background-color: #d9534f; font-weight: bolder; text-align: center; margin: 5px;';
+  elem.innerHTML = `${r.name} is a partner (${r.tier}) in ${r.fullLocation || r.isoLocation}`;
+  return elem;
 }
