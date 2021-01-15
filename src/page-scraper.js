@@ -38,11 +38,10 @@ export class ProfilePageScrape {
    * @returns {string}
    */
   get company() {
-    const experienceElem = this.document.getEle("#experience-section");
+    const experienceElem = this.document.getElementById("experience-section");
     if (!experienceElem) {
       return [];
     }
-    console.log(experienceElem);
     const lastPosElem = experienceElem.querySelector(
       ".pv-profile-section__list-item"
     );
@@ -68,7 +67,7 @@ export class ProfilePageScrape {
       ];
     }
 
-    // Different layment with multiple experience in the same company
+    // Different layout if there is multiple experience in the same company
     return [posNameElem.querySelectorAll("span")[1].textContent.trim()];
   }
 }
@@ -87,7 +86,7 @@ export class RecruiterProfilePageScrape {
    */
   get name() {
     const nameElem = this.document.querySelector(
-      "a[data-test-link-to-profile-link]"
+      "span[data-test-row-lockup-full-name]"
     );
     if (!nameElem) {
       return null;
@@ -106,22 +105,9 @@ export class RecruiterProfilePageScrape {
     const locationElem = this.document.querySelector(
       "div[data-test-row-lockup-location]"
     );
-    // if (!locationElem) {
-    //   return this.getFallbackCompany();
-    // }
-    // const locationUrlElem = locationElem.querySelector('a');
-    // if (!locationUrlElem) {
-    //   return this.getFallbackLocation();
-    // }
-    // const locationUrl = locationUrlElem.getAttribute('href');
-    // if (!locationUrl) {
-    //   return this.getFallbackLocation();
-    // }
-    // const countryCode = RecruiterProfilePageScrape.getQueryParam('countryCode', locationUrl);
-    // if (!countryCode) {
-    //   return this.getFallbackLocation();
-    // }
-    // return countryCode;
+    if (!locationElem) {
+      return;
+    }
 
     const splitLoc = locationElem.textContent.split(",");
 
@@ -156,51 +142,6 @@ export class RecruiterProfilePageScrape {
       []
     );
     return companies;
-  }
-
-  /**
-   * Retrieve the name of the company from the company element.
-   * @returns {string}
-   */
-  getFallbackCompany() {
-    const titleElem = this.document.querySelector(".title");
-    if (!titleElem) {
-      return null;
-    }
-    return titleElem.textContent.split(" at ")[1];
-  }
-
-  /**
-   * Retrieve a location based on the text contents of the location element.
-   * This is the name of the country, not the country code.
-   * @returns {string} The name of the country
-   */
-  getFallbackLocation() {
-    const locationElem = this.document.querySelector(".location");
-    if (!locationElem) {
-      return null;
-    }
-    const splitLocation = locationElem.textContent.split(",");
-    return splitLocation[splitLocation.length - 1].trim();
-  }
-
-  /**
-   * Helper function for retrieving a query param from a URL.
-   * @param {string} name The name of the query param.
-   * @param {string} url The URL to retrieve the query param from.
-   * @returns {string}
-   */
-  static getQueryParam(name, url) {
-    if (!name || !url) {
-      return null;
-    }
-    const parsedName = name.replace(/[[\]]/g, "\\$&");
-    const regex = new RegExp(`[?&]${parsedName}(=([^&#]*)|&|#|$)`);
-    const results = regex.exec(url);
-    if (!results || !results[2]) {
-      return null;
-    }
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
   }
 }
 
@@ -242,20 +183,7 @@ export class RecruiterSearchPageScrape {
     if (!currentPos) {
       return [];
     }
-    //   const companies = Array.from(posElems).reduce((acc, posElem) => {
-    //     let positionTextNodes = Array.from(posElem.childNodes);
-    //     if (positionTextNodes.length === 0) {
-    //       return acc;
-    //     }
-    //     if (positionTextNodes[positionTextNodes.length - 1].textContent.toLowerCase().includes(' present')) {
-    //       positionTextNodes = positionTextNodes.slice(0, -1);
-    //     }
 
-    //     const posCompanyAtStr = positionTextNodes.map(n => n.textContent).join('');
-    //     acc.push(posCompanyAtStr.split(' at ')[1]);
-    //     return acc;
-    //   }, []);
-    //   return companies;
     const posElem = currentPos.querySelector("span");
     return [posElem.textContent.trim().split(" at ")[1]];
   }

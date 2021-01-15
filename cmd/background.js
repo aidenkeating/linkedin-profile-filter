@@ -185,30 +185,3 @@ chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
   }
   return true;
 });
-
-// TODO - Fix loading scripts from ajax change in url
-chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  // read changeInfo data and do something with it
-  // like send the new url to contentscripts.js
-  if (changeInfo.url) {
-
-    if (changeInfo.url.startsWith("https://www.linkedin.com/talent/search/profile")) {
-      console.log("Recruiter profile page");
-      // chrome.tabs.executeScript(tabId, {"file": "dist/li-recruiter-profile-page.js"});
-      chrome.tabs.sendMessage(tabId, "recruiterProfile");
-      return;
-    }
-
-    if (changeInfo.url.startsWith("https://www.linkedin.com/talent/search")) {
-      console.log("Recruiter search page");
-      // chrome.tabs.executeScript(tabId, {"file": "dist/li-recruiter-search-page.js"});
-      chrome.tabs.sendMessage(tabId, "recruiterSearch");
-      return;
-    }
-
-    if (changeInfo.url.startsWith("https://www.linkedin.com/in")) {
-      chrome.tabs.sendMessage(tabId, "individualProfile");
-      return;
-    }
-  }
-});

@@ -1,6 +1,5 @@
 /* global chrome */
 import { ProfilePageScrape, genScrapeId, genMatchDiv } from '../src/page-scraper';
-import ChromeMessenger from '../src/messenger';
 
 function handleMessageResponse(msg, scrape) {
   // The profile does not need to be filtered.
@@ -23,12 +22,10 @@ function handleRemoveNotification() {
 }
 
 // Initialize
-export async function scrapeProfilePage() {
-  const messenger = new ChromeMessenger();
+export async function scrapeProfilePage(messenger) {
   console.log("scrapping personal profile page..")
 
   const scrape = new ProfilePageScrape(document);
-  console.log(scrape)
   if (!scrape.name || !scrape.location
     || !scrape.company || !!document.getElementById(genScrapeId(scrape))) {
     return;
@@ -54,6 +51,3 @@ export async function scrapeProfilePage() {
     console.error('Failed to check profile', err);
   }
 }
-
-setInterval(scrapeProfilePage.bind(null), 2500);
-scrapeProfilePage();
