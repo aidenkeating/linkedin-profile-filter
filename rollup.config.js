@@ -16,7 +16,8 @@ const jsFiles = [
     'li-profile-page.js',
     'li-recruiter-profile-page.js',
     'li-recruiter-search-page.js',
-    'options.js'
+    'options.js',
+    'content.js'
 ];
 // directory where additional files that should be copied are stored
 const extrasDir = 'assets';

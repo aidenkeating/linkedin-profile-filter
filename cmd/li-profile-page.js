@@ -23,9 +23,12 @@ function handleRemoveNotification() {
 }
 
 // Initialize
-const messenger = new ChromeMessenger();
-async function scrapePage(messenger) {
+export async function scrapeProfilePage() {
+  const messenger = new ChromeMessenger();
+  console.log("scrapping personal profile page..")
+
   const scrape = new ProfilePageScrape(document);
+  console.log(scrape)
   if (!scrape.name || !scrape.location
     || !scrape.company || !!document.getElementById(genScrapeId(scrape))) {
     return;
@@ -52,5 +55,5 @@ async function scrapePage(messenger) {
   }
 }
 
-setInterval(scrapePage.bind(null, messenger), 2500);
-scrapePage(messenger);
+setInterval(scrapeProfilePage.bind(null), 2500);
+scrapeProfilePage();

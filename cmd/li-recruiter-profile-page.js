@@ -1,29 +1,41 @@
-import { RecruiterProfilePageScrape, genScrapeId, genMatchDiv } from '../src/page-scraper';
-import ChromeMessenger from '../src/messenger';
+import {
+  RecruiterProfilePageScrape,
+  genScrapeId,
+  genMatchDiv,
+} from "../src/page-scraper";
+
+const scrapeType = "recruiterProfile";
 
 function handleMessageResponse(msg, scrape) {
-  if (!msg || document.getElementById('linkedin-profile-filter-status')) {
+  if (!msg || !!document.getElementById(genScrapeId(scrape, scrapeType))) {
     return;
   }
   if (!msg.matches) {
-    console.error('No matches were retrieved', msg);
+    console.error("No matches were retrieved", msg);
   }
-  const backgroundCardElem = document.querySelector('#profile-ugc .module-header');
+  const backgroundCardElem = document.querySelector(
+    ".topcard-condensed__content"
+  );
   if (!backgroundCardElem) {
     return;
   }
-  const primaryMatch = msg.matches.find(m => m.locationMatch);
+  const primaryMatch = msg.matches.find((m) => m.locationMatch);
   if (!primaryMatch) {
     return;
   }
-  backgroundCardElem.insertBefore(genMatchDiv(primaryMatch, scrape), backgroundCardElem.children[1]);
+
+  backgroundCardElem.insertBefore(
+    genMatchDiv(primaryMatch, scrape, scrapeType),
+    backgroundCardElem.firstChild
+  );
 }
 
 // Initialize
-const messenger = new ChromeMessenger();
-async function scrapePage(messenger) {
+export async function scrapeRecruiterProfilePage(messenger) {
+  console.log("scraping recruiter profile page");
+
   const scrape = new RecruiterProfilePageScrape(document);
-  if (!scrape.name || !scrape.location || !scrape.company || !!document.getElementById(genScrapeId(scrape))) {
+  if (!scrape.name || !scrape.location || !scrape.company) {
     return;
   }
 
@@ -31,13 +43,10 @@ async function scrapePage(messenger) {
     const results = await messenger.search({
       name: scrape.name,
       location: scrape.location,
-      company: scrape.company
+      company: scrape.company,
     });
     handleMessageResponse(results, scrape);
   } catch (err) {
-    console.error('Failed to check profile', err);
+    console.error("Failed to check profile", err);
   }
 }
-
-scrapePage(messenger).then(() => setInterval(scrapePage.bind(null, messenger), 2500));
-
