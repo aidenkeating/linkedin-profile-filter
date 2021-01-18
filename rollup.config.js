@@ -24,6 +24,9 @@ const extrasDir = 'assets';
 const extraFiles = [
     'options.html',
     'pure-min.css',
+    'icon16.png',
+    'icon48.png',
+    'icon128.png'
 ];
 // declare actions to perform
 const buildActions = [];
