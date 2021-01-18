@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "LinkedIn Profile Filter",
-  "version": "0.5.0",
+  "version": "0.11.0",
   "description": "Add notifications to LinkedIn account pages based on criteria",
   "author": "Aiden Keating <akeating@redhat.com>",
   "oauth2": {
@@ -21,6 +21,7 @@
   ],
   "options_page": "dist/options.html",
   "permissions": [
+    "notifications",
     "identity",
     "activeTab",
     "storage",
