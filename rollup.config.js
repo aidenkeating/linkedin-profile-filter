@@ -16,6 +16,7 @@ const jsFiles = [
     'li-profile-page.js',
     'li-recruiter-profile-page.js',
     'li-recruiter-search-page.js',
+    'li-recruiter-pipeline-page.js',
     'options.js',
     'content.js'
 ];

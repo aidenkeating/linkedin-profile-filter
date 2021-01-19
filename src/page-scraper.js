@@ -145,7 +145,7 @@ export class RecruiterProfilePageScrape {
   }
 }
 
-export class RecruiterSearchPageScrape {
+export class RecruiterSearchOrPipelinePageScrape {
   constructor(resultElem) {
     this.resultElem = resultElem;
   }

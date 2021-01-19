@@ -6,6 +6,7 @@ import ChromeMessenger from "../src/messenger";
 import { scrapeRecruiterSearchPage } from "./li-recruiter-search-page";
 import { scrapeRecruiterProfilePage } from "./li-recruiter-profile-page";
 import { scrapeProfilePage } from "./li-profile-page";
+import { scrapeRecruiterPipelinePage } from "./li-recruiter-pipeline-page";
 
 const messenger = new ChromeMessenger();
 
@@ -19,4 +20,8 @@ scrapeRecruiterProfilePage(messenger).then(() =>
 
 scrapeProfilePage(messenger).then(() =>
   setInterval(scrapeProfilePage.bind(null, messenger), 2500)
+);
+
+scrapeRecruiterPipelinePage(messenger).then(() =>
+  setInterval(scrapeRecruiterPipelinePage.bind(null, messenger), 2500)
 );
