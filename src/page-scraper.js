@@ -185,7 +185,10 @@ export class RecruiterSearchOrPipelinePageScrape {
     }
 
     const posElem = currentPos.querySelector("span");
-    return [posElem.textContent.trim().split(" at ")[1]];
+    const postSplit = posElem.textContent.trim().split(" at ")
+
+    // There can be multiple "at" in postition title giving multiple companies - returning the last campany
+    return [postSplit[postSplit.length - 1]];
   }
 }
 
