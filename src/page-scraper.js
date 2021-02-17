@@ -1,3 +1,4 @@
+import { GenerateNamesForCompay } from "./companySuffix";
 export class ProfilePageScrape {
   /**
    * @param {Document} document
@@ -141,7 +142,7 @@ export class RecruiterProfilePageScrape {
       },
       []
     );
-    return companies;
+    return GenerateNamesForCompay(companies[0], this.location);
   }
 }
 
@@ -188,7 +189,9 @@ export class RecruiterSearchOrPipelinePageScrape {
     const postSplit = posElem.textContent.trim().split(" at ")
 
     // There can be multiple "at" in postition title giving multiple companies - returning the last campany
-    return [postSplit[postSplit.length - 1]];
+    const company = postSplit[postSplit.length - 1]
+
+    return GenerateNamesForCompay(company, this.location);
   }
 }
 

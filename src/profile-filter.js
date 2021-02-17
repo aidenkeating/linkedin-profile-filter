@@ -1,3 +1,5 @@
+import { commonFactories } from "./companySuffix";
+
 export class RegexAltNameFactory {
   constructor(matches, additionalFactories) {
     this.matches = matches;
@@ -56,45 +58,10 @@ export class DefaultAltNameFactory {
 
 export class CompanyNameParser {
   constructor() {
-    const basicFactories = [
-      new DefaultAltNameFactory('gmbh & co kg'),
-      new DefaultAltNameFactory('gmbh & co.kg'),
-      new DefaultAltNameFactory('gmbh & co. kg'),
-      new DefaultAltNameFactory('gmbh & co.kg'),
-      new DefaultAltNameFactory('ag & co ohg'),
-      new DefaultAltNameFactory('ltd. & co. kg'),
-      new DefaultAltNameFactory('ltd. & co kg'),
-      new DefaultAltNameFactory('ltd. & co.kg'),
-      new DefaultAltNameFactory('(Pty) Ltd'),
-      new DefaultAltNameFactory('(Pty) Ltd.'),
-      new DefaultAltNameFactory(' emea', { endsWith: true }),
-      new DefaultAltNameFactory(' germany', { endsWith: true }),
-      new DefaultAltNameFactory('mini gmbh'),
-      new DefaultAltNameFactory('gmbh'),
-      new DefaultAltNameFactory(' ag', { endsWith: true }),
-      new DefaultAltNameFactory('a.g.'),
-      new DefaultAltNameFactory(' sa', { endsWith: true }),
-      new DefaultAltNameFactory('s.l.'),
-      new DefaultAltNameFactory('ltd.'),
-      new DefaultAltNameFactory('ltd'),
-      new DefaultAltNameFactory('sp z.o.o'),
-      new DefaultAltNameFactory('sp. z o.o.'),
-      new DefaultAltNameFactory('d.o.o.'),
-      new DefaultAltNameFactory('b.v.'),
-      new DefaultAltNameFactory(' limited', { endsWith: true }),
-      new DefaultAltNameFactory(' oy', { endsWith: true }),
-      new DefaultAltNameFactory('llc'),
-      new DefaultAltNameFactory('s.l.'),
-      new DefaultAltNameFactory('s.p.a.'),
-      new DefaultAltNameFactory(' spa', { endsWith: true }),
-      new DefaultAltNameFactory('d.o.o.'),
-      new DefaultAltNameFactory(' a/s', { endsWith: true }),
-      new DefaultAltNameFactory('s.r.o.'),
-      new DefaultAltNameFactory('a.s.'),
-      new DefaultAltNameFactory(' lda', { endsWith: true }),
-      new DefaultAltNameFactory(' sarl', { endsWith: true }),
-      new DefaultAltNameFactory(' spol s.r.o.', { endsWith: true }),
-    ];
+    const basicFactories = Array.from(commonFactories.reduce((acc, company) => {
+        acc.push(new DefaultAltNameFactory(company.suffix, { endsWith: company.endsWith }))
+        return acc
+    }, []));
     /* eslint-disable no-useless-escape */
     this.altNameFactories = [
       new RegexAltNameFactory([
