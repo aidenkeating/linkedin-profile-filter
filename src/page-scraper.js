@@ -50,10 +50,7 @@ export class ProfilePageScrape {
       return [];
     }
     const posDateElem = lastPosElem.querySelector(".pv-entity__date-range");
-    if (
-      !posDateElem ||
-      !posDateElem.textContent.toLowerCase().includes("present")
-    ) {
+    if (!posDateElem ||!posDateElem.textContent.toLowerCase().includes("present")) {
       return [];
     }
     let posNameElem = lastPosElem.querySelector(
@@ -178,20 +175,44 @@ export class RecruiterSearchOrPipelinePageScrape {
   }
 
   get company() {
-    const currentPos = this.resultElem.querySelector(
+    // Get current selection
+    const currentSection = this.resultElem.querySelector(".history-group .ember-view")
+    if (!currentSection) {
+      return [];
+    }
+
+    // Get all current positions
+    const currentPos = currentSection.querySelectorAll(
       ".history-group__description"
     );
     if (!currentPos) {
       return [];
     }
 
-    const posElem = currentPos.querySelector("span");
-    const postSplit = posElem.textContent.trim().split(" at ")
+    let companies = []
 
-    // There can be multiple "at" in postition title giving multiple companies - returning the last campany
-    const company = postSplit[postSplit.length - 1]
+    currentPos.forEach( pos => {
+      // Check position is current
+      const posDateElem = pos.querySelector(
+        ".row-description-entry__date-duration"
+      );
 
-    return GenerateNamesForCompay(company, this.location);
+      if (!posDateElem ||!posDateElem.textContent.toLowerCase().includes("present")) {
+        return;
+      }
+
+      const posElem = pos.querySelector("span");
+      const postSplit = posElem.textContent.trim().split(" at ")
+  
+      // There can be multiple "at" in postition title giving multiple companies - returning the last campany
+      const company = postSplit[postSplit.length - 1]
+
+      const names = GenerateNamesForCompay(company, this.location);
+
+      companies = companies.concat(names)
+    })
+
+    return companies
   }
 }
 
