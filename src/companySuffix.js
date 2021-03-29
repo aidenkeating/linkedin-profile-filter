@@ -40,6 +40,7 @@ const commonFactories = [
   { suffix: " sarl", endsWith: true },
   { suffix: " spol s.r.o.", endsWith: true },
   { suffix: ", PT.", endsWith: true},
+  // { suffix: ", PT", endsWith: true},
   { suffix: "PT. "},
   { suffix: "PT "},
   { suffix: "." },
