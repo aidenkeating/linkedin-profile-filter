@@ -50,7 +50,10 @@ export class ProfilePageScrape {
       return [];
     }
     const posDateElem = lastPosElem.querySelector(".pv-entity__date-range");
-    if (!posDateElem ||!posDateElem.textContent.toLowerCase().includes("present")) {
+    if (
+      !posDateElem ||
+      !posDateElem.textContent.toLowerCase().includes("present")
+    ) {
       return [];
     }
     let posNameElem = lastPosElem.querySelector(
@@ -83,7 +86,11 @@ export class RecruiterProfilePageScrape {
    * @returns {string}
    */
   get name() {
-    const nameElem = this.document.querySelector(
+    const profileContainer = this.document.getElementById("profile-container");
+    if (!profileContainer) {
+      return null;
+    }
+    const nameElem = profileContainer.querySelector(
       "span[data-test-row-lockup-full-name]"
     );
     if (!nameElem) {
@@ -100,7 +107,11 @@ export class RecruiterProfilePageScrape {
    * @returns {string}
    */
   get location() {
-    const locationElem = this.document.querySelector(
+    const profileContainer = this.document.getElementById("profile-container");
+    if (!profileContainer) {
+      return null;
+    }
+    const locationElem = profileContainer.querySelector(
       "div[data-test-row-lockup-location]"
     );
     if (!locationElem) {
@@ -119,9 +130,14 @@ export class RecruiterProfilePageScrape {
     }
     const companies = Array.from(prevPositionElems).reduce(
       (acc, prevPositionElem) => {
-        const prevPositionCompanyElem = prevPositionElem.querySelector(
-          "dd[data-test-position-entity-company-name]"
+        let prevPositionCompanyElem = prevPositionElem.querySelector(
+          ".position-item__company-link"
         );
+        if (!prevPositionCompanyElem) {
+          prevPositionCompanyElem = prevPositionElem.querySelector(
+            "dd[data-test-position-entity-company-name]"
+          );
+        }
         if (!prevPositionCompanyElem) {
           return acc;
         }
@@ -176,7 +192,9 @@ export class RecruiterSearchOrPipelinePageScrape {
 
   get company() {
     // Get current selection
-    const currentSection = this.resultElem.querySelector(".history-group .ember-view")
+    const currentSection = this.resultElem.querySelector(
+      ".history-group .ember-view"
+    );
     if (!currentSection) {
       return [];
     }
@@ -189,30 +207,33 @@ export class RecruiterSearchOrPipelinePageScrape {
       return [];
     }
 
-    let companies = []
+    let companies = [];
 
-    currentPos.forEach( pos => {
+    currentPos.forEach((pos) => {
       // Check position is current
       const posDateElem = pos.querySelector(
         ".row-description-entry__date-duration"
       );
 
-      if (!posDateElem ||!posDateElem.textContent.toLowerCase().includes("present")) {
+      if (
+        !posDateElem ||
+        !posDateElem.textContent.toLowerCase().includes("present")
+      ) {
         return;
       }
 
       const posElem = pos.querySelector("span");
-      const postSplit = posElem.textContent.trim().split(" at ")
-  
+      const postSplit = posElem.textContent.trim().split(" at ");
+
       // There can be multiple "at" in postition title giving multiple companies - returning the last campany
-      const company = postSplit[postSplit.length - 1]
+      const company = postSplit[postSplit.length - 1];
 
       const names = GenerateNamesForCompay(company, this.location);
 
-      companies = companies.concat(names)
-    })
+      companies = companies.concat(names);
+    });
 
-    return companies
+    return companies;
   }
 }
 
