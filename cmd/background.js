@@ -101,7 +101,7 @@ async function getCriteria(opts, key) {
     const filterCriteriaBackup = await criteriaClient.getFilterCriteria();
     await setOptions({ lastRead: Date.now() });
     await setLocalCache({ filterCriteriaBackup });
-    return filterCriteriaBackup
+    return filterCriteriaBackup;
   }
 
   const filterCriteria = await criteriaClient.getFilterCriteria();
@@ -166,16 +166,25 @@ async function handleSearch(body) {
     );
     if (matches.length === 0) {
       console.log("No matches found using regular - trying match from backup");
+      const removedCompanyTier = "Unknown";
       criteriaBackup.forEach((backup) => {
+        // Variation name is initially loaded into tier attribute
         backup.backupName = backup.tier;
+        // Find company from main sheet for setting tier
         const mainSheetCompany = criteria.find(
           (it) => it.name === backup.name && it.location === backup.location
         );
-        backup.tier = mainSheetCompany ? mainSheetCompany.tier : "Unknown";
+        backup.tier = mainSheetCompany
+          ? mainSheetCompany.tier
+          : removedCompanyTier;
       });
+      // Filter against matching company and backup name and only if tier isn't unknown 
+      // (i.e. company could be removed from main sheet)
       matches = criteriaBackup.filter((c) =>
         body.company.find(
-          (comp) => comp.toLowerCase() === c.backupName.trim().toLowerCase()
+          (comp) =>
+            comp.toLowerCase() === c.backupName.trim().toLowerCase() &&
+            c.tier != removedCompanyTier
         )
       );
     }
