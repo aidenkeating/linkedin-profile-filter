@@ -119,10 +119,10 @@ export class RecruiterProfilePageScrape {
     }
     const companies = Array.from(prevPositionElems).reduce(
       (acc, prevPositionElem) => {
-        const prevPositionInfoElem = prevPositionElem.querySelector(
-          ".position-item__company-link"
+        const prevPositionCompanyElem = prevPositionElem.querySelector(
+          "dd[data-test-position-entity-company-name]"
         );
-        if (!prevPositionInfoElem) {
+        if (!prevPositionCompanyElem) {
           return acc;
         }
         const prevPositionDateElem = prevPositionElem.querySelector(
@@ -134,7 +134,7 @@ export class RecruiterProfilePageScrape {
         ) {
           return acc;
         }
-        acc.push(prevPositionInfoElem.textContent.trim());
+        acc.push(prevPositionCompanyElem.textContent.trim());
         return acc;
       },
       []
