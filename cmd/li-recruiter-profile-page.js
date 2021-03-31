@@ -7,12 +7,10 @@ import {
 const scrapeType = "recruiterProfile";
 
 function handleMessageResponse(msg, scrape) {
-  if (!msg || !!document.getElementById(genScrapeId(scrape, scrapeType))) {
+  if (!msg || !msg.matches || !!document.getElementById(genScrapeId(scrape, scrapeType))) {
     return;
   }
-  if (!msg.matches) {
-    console.error("No matches were retrieved", msg);
-  }
+
   const backgroundCardElem = document.querySelector(
     ".topcard-condensed__content"
   );

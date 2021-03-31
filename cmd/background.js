@@ -101,6 +101,7 @@ async function getCriteria(opts, key) {
     const filterCriteriaBackup = await criteriaClient.getFilterCriteria();
     await setOptions({ lastRead: Date.now() });
     await setLocalCache({ filterCriteriaBackup });
+    return filterCriteriaBackup
   }
 
   const filterCriteria = await criteriaClient.getFilterCriteria();
@@ -132,11 +133,15 @@ const getFilterReadOptions = (opts, key) => {
 };
 
 async function handleSearch(body) {
+  if (body.company.length < 1) {
+    return [];
+  }
+
   const isoLocation = isoCountryMap[body.location.toUpperCase()]
     ? body.location
     : countryIsoMap[body.location.toLowerCase()];
   if (!isoLocation) {
-    return null;
+    return [];
   }
 
   const options = await getOptions();
@@ -177,12 +182,25 @@ async function handleSearch(body) {
   }
 
   // if (matches.length === 0) {
-  //   const fuse = new Fuse(criteria, fuseOptions);
-  //   const fuseSearchResult = fuse.search(body.company[0]).map((c) => {
-  //     return c.item
-  //   })
-  //   console.log("fuse result", body.company[0], fuseSearchResult);
-  //   matches = fuseSearchResult
+  //   console.log("No matches found - trying fuzzy search");
+  //   const companies = Array.from(body.company).reduce(
+  //     (acc, company) => {
+  //       const fuse = new Fuse(criteria, fuseOptions);
+  //       const fuseSearchResult = fuse.search(company).map((c) => {
+  //         return c.item
+  //       })
+
+  //       acc = acc.concat(fuseSearchResult)
+  //       return acc;
+  //     },
+  //     []
+  //   );
+  //   // const fuse = new Fuse(criteria, fuseOptions);
+  //   // const fuseSearchResult = fuse.search(body.company[0]).map((c) => {
+  //   //   return c.item
+  //   // })
+  //   console.log("fuse result", body.company, companies);
+  //   matches = companies
   // }
 
   matches = matches.map((c) => {
