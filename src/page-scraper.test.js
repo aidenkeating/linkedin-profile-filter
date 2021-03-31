@@ -6,16 +6,18 @@ const goodDoc = new JSDOM(`<!DOCTYPE html>
   <html>
     <head></head>
     <body>
-      <span data-test-row-lockup-full-name>
+      <div id="profile-container">
+        <span data-test-row-lockup-full-name>
         Aiden Keating
-      </span>
-      <div data-test-row-lockup-location>
-      United States
-      </div>
-      <div class="position-item">
-        <h2 class="searchable">Software Engineer</h2>
-        <a class="position-item__company-link">Red Hat</a>
-        <span data-test-position-entity-date-range>2018 - Present</h2>
+        </span>
+        <div data-test-row-lockup-location>
+        United States
+        </div>
+        <div class="position-item">
+          <h2 class="searchable">Software Engineer</h2>
+          <a class="position-item__company-link">Red Hat</a>
+          <span data-test-position-entity-date-range>2018 - Present</h2>
+        </div>
       </div>
     </body>
   </html>`).window.document;
