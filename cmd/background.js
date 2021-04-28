@@ -151,10 +151,10 @@ async function handleSearch(body) {
   let matches = criteria.filter(
     (c) =>
       body.company.find(
-        (comp) => comp.toLowerCase() === c.name.toLowerCase()
+        (comp) => comp.toLowerCase() === c.name.toLowerCase() && c.location === isoLocation
       ) ||
       c.altNames.find((alt) =>
-        body.company.find((comp) => new RegExp(alt).test(comp.toLowerCase()))
+        body.company.find((comp) => new RegExp(alt).test(comp.toLowerCase())) && c.location === isoLocation
       )
   );
 
@@ -184,7 +184,7 @@ async function handleSearch(body) {
         body.company.find(
           (comp) =>
             comp.toLowerCase() === c.backupName.trim().toLowerCase() &&
-            c.tier != removedCompanyTier
+            c.tier != removedCompanyTier && c.location === isoLocation
         )
       );
     }
