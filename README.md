@@ -3,6 +3,10 @@
 A small extension for Chrome to show notifications on a LinkedIn or LinkedIn
 Recruiter page if the viewed profile matches a specified set of criteria.
 
+## Prerequisite
+* [rollup.js](https://rollupjs.org/guide/en/)
+    * Required for building plugin
+
 ## Getting started
 
 Copy `config.template.json` to `config.json`:

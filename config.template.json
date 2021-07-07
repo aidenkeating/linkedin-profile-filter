@@ -3,5 +3,9 @@
   "nameRange": "",
   "locationRange": "",
   "tierRange": "",
-  "cacheTimeout": 15
+  "cacheTimeout": 15,
+  "backupSheet": "",
+  "backupCountryRange": "",
+  "backupAccountRange": "",
+  "backupVariationRange": ""
 }

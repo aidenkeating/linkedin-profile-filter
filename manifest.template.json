@@ -1,32 +1,27 @@
 {
   "manifest_version": 2,
   "name": "LinkedIn Profile Filter",
-  "version": "0.5.0",
+  "version": "0.15.0",
   "description": "Add notifications to LinkedIn account pages based on criteria",
   "author": "Aiden Keating <akeating@redhat.com>",
   "oauth2": {
     "client_id": "",
-    "scopes": [
-      "https://www.googleapis.com/auth/spreadsheets.readonly"
-    ]
+    "scopes": ["https://www.googleapis.com/auth/spreadsheets.readonly"]
   },
   "key": "",
   "background": {
     "scripts": ["dist/background.js"],
     "persistent": true
   },
-  "content_scripts": [{
-    "matches": ["https://www.linkedin.com/recruiter/profile/*"],
-    "js": ["dist/li-recruiter-profile-page.js"]
-  }, {
-    "matches": ["https://www.linkedin.com/in/*"],
-    "js": ["dist/li-profile-page.js"]
-  }, {
-    "matches": ["https://www.linkedin.com/recruiter/smartsearch/*"],
-    "js": ["dist/li-recruiter-search-page.js"]
-  }],
+  "content_scripts": [
+    {
+      "matches": ["https://www.linkedin.com/*"],
+      "js": ["dist/content.js"]
+    }
+  ],
   "options_page": "dist/options.html",
   "permissions": [
+    "notifications",
     "identity",
     "activeTab",
     "storage",
