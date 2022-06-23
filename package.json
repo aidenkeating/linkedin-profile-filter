@@ -28,7 +28,7 @@
     "gulp-htmlmin": "^5.0.1",
     "gulp-tape": "^1.0.0",
     "gulp-zip": "^5.0.0",
-    "jsdom": "^15.1.1",
+    "jsdom": "^16.5.0",
     "rollup-plugin-copy": "^3.3.0",
     "tape": "^4.13.2",
     "tape-async": "^2.3.0",
