@@ -6,7 +6,7 @@ function handleMessageResponse(msg, scrape) {
   if (!msg || document.getElementById('linkedin-profile-filter-status')) {
     return;
   }
-  const topCardElem = document.querySelector('.is-header-zone');
+  const topCardElem = document.querySelector('.topcard-condensed__content');
   if (!topCardElem) {
     return;
   }

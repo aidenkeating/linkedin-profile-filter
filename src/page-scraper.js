@@ -5,6 +5,7 @@ export class ProfilePageScrape {
    */
   constructor(document) {
     this.document = document;
+    // console.log(this)
   }
 
   /**
@@ -12,7 +13,7 @@ export class ProfilePageScrape {
    */
   get name() {
     const nameElem = this.document.querySelector(
-      ".inline.t-24.t-black.t-normal.break-words"
+      "span[data-test-row-lockup-full-name]"
     );
     if (!nameElem) {
       return;
@@ -25,12 +26,13 @@ export class ProfilePageScrape {
    */
   get location() {
     const locElem = this.document.querySelector(
-      ".t-16.t-black.t-normal.inline-block"
+      "div[data-live-test-row-lockup-location]"
     );
+    // console.log("location is", locElem)
     if (!locElem) {
       return;
     }
-    const splitLoc = locElem.textContent.split(",");
+    const splitLoc = locElem.textContent.split("·");
 
     return splitLoc[splitLoc.length - 1].trim().toLowerCase();
   }
@@ -39,17 +41,23 @@ export class ProfilePageScrape {
    * @returns {string}
    */
   get company() {
-    const experienceElem = this.document.getElementById("experience-section");
+    const experienceElem = this.document.querySelector("section[data-test-profile-background-card]");
     if (!experienceElem) {
       return [];
     }
-    const lastPosElem = experienceElem.querySelector(
-      ".pv-profile-section__list-item"
+    // console.log("experience elem", experienceElem)
+
+    const posElems = experienceElem.querySelectorAll(
+      "div[data-test-position-list-container]"
     );
-    if (!lastPosElem) {
+    if (!posElems) {
       return [];
     }
-    const posDateElem = lastPosElem.querySelector(".pv-entity__date-range");
+    // console.log("posElems", posElems)
+
+    const lastPosElem = posElems[0]
+
+    const posDateElem = lastPosElem.querySelector("span[data-test-position-entity-date-range]");
     if (
       !posDateElem ||
       !posDateElem.textContent.toLowerCase().includes("present")
@@ -57,19 +65,19 @@ export class ProfilePageScrape {
       return [];
     }
     let posNameElem = lastPosElem.querySelector(
-      ".pv-entity__company-summary-info"
+      "a[data-test-position-entity-company-link]"
     );
-    // One experience in the latest company
-    if (!posNameElem) {
-      return [
-        lastPosElem
-          .querySelector("p.pv-entity__secondary-title")
-          .firstChild.wholeText.trim(),
-      ];
-    }
+    // // One experience in the latest company
+    // if (!posNameElem) {
+    //   return [
+    //     lastPosElem
+    //       .querySelector("p.pv-entity__secondary-title")
+    //       .firstChild.wholeText.trim(),
+    //   ];
+    // }
 
     // Different layout if there is multiple experience in the same company
-    return [posNameElem.querySelectorAll("span")[1].textContent.trim()];
+    return [posNameElem.textContent.trim()];
   }
 }
 
@@ -119,7 +127,7 @@ export class RecruiterProfilePageScrape {
       return;
     }
 
-    const splitLoc = locationElem.textContent.split("·");
+    const splitLoc = locationElem.textContent.split(/[·|,]/)
 
     return splitLoc[splitLoc.length - 1].trim().toLowerCase();
   }
@@ -259,7 +267,7 @@ export function genScrapeId(r, scrapeType) {
 export function genMatchDiv(r, s, scrapeType) {
   const elem = document.createElement("div");
   elem.id = genScrapeId(s, scrapeType);
-  console.log("id is", elem.id, scrapeType)
+  // console.log("id is", elem.id, scrapeType)
   elem.style =
     "color: white; border-radius: 16px; border: 3px solid #d9534f; background-color: #d9534f; font-weight: bolder; text-align: center; margin: 5px;";
   elem.innerHTML = `${r.name} is a partner (${r.tier}) in ${
