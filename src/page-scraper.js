@@ -79,6 +79,7 @@ export class RecruiterProfilePageScrape {
    */
   constructor(document) {
     this.document = document;
+    // console.log(this)
   }
 
   /**
@@ -118,21 +119,25 @@ export class RecruiterProfilePageScrape {
       return;
     }
 
-    const splitLoc = locationElem.textContent.split(",");
+    const splitLoc = locationElem.textContent.split("·");
 
     return splitLoc[splitLoc.length - 1].trim().toLowerCase();
   }
 
   get company() {
-    const prevPositionElems = this.document.querySelectorAll(".position-item");
+    const prevPositionElems = this.document.querySelectorAll("div[data-test-group-position-list-container]");
     if (!prevPositionElems) {
       return [];
     }
+
+    // console.log("the positions", prevPositionElems)
     const companies = Array.from(prevPositionElems).reduce(
       (acc, prevPositionElem) => {
         let prevPositionCompanyElem = prevPositionElem.querySelector(
-          ".position-item__company-link"
+          "strong[data-test-grouped-position-entity-company-name]"
         );
+
+        // console.log("the prev company elem", prevPositionCompanyElem, prevPositionCompanyElem.textContent.trim())
         if (!prevPositionCompanyElem) {
           prevPositionCompanyElem = prevPositionElem.querySelector(
             "dd[data-test-position-entity-company-name]"
@@ -142,19 +147,21 @@ export class RecruiterProfilePageScrape {
           return acc;
         }
         const prevPositionDateElem = prevPositionElem.querySelector(
-          "span[data-test-position-entity-date-range]"
+          "span[data-test-grouped-position-entity-date-range]"
         );
-        if (
-          !prevPositionDateElem ||
-          !prevPositionDateElem.textContent.toLowerCase().includes("present")
-        ) {
+
+        // console.log("Position length is", prevPositionDateElem.textContent)
+        if (!prevPositionDateElem || !prevPositionDateElem.textContent.toLowerCase().includes("present")) {
           return acc;
         }
+        // console.log("returning the present company")
         acc.push(prevPositionCompanyElem.textContent.trim());
         return acc;
       },
       []
     );
+
+    // console.log("the companies", companies)
     return GenerateNamesForCompay(companies[0], this.location);
   }
 }
@@ -252,6 +259,7 @@ export function genScrapeId(r, scrapeType) {
 export function genMatchDiv(r, s, scrapeType) {
   const elem = document.createElement("div");
   elem.id = genScrapeId(s, scrapeType);
+  console.log("id is", elem.id, scrapeType)
   elem.style =
     "color: white; border-radius: 16px; border: 3px solid #d9534f; background-color: #d9534f; font-weight: bolder; text-align: center; margin: 5px;";
   elem.innerHTML = `${r.name} is a partner (${r.tier}) in ${
