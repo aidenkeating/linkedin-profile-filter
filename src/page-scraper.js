@@ -162,6 +162,7 @@ export class RecruiterProfilePageScrape {
 export class RecruiterSearchOrPipelinePageScrape {
   constructor(resultElem) {
     this.resultElem = resultElem;
+    // console.debug(this);
   }
 
   get name() {
@@ -195,15 +196,20 @@ export class RecruiterSearchOrPipelinePageScrape {
     const currentSection = this.resultElem.querySelector(
       ".history-group .ember-view"
     );
+
+    // console.debug("the selection", currentSection)
     if (!currentSection) {
+      // console.debug("found no selection")
       return [];
     }
 
     // Get all current positions
     const currentPos = currentSection.querySelectorAll(
-      ".history-group__description"
+      "li[data-test-description-description]"
     );
+    // console.debug("the positions", currentPos)
     if (!currentPos) {
+      // console.debug("found no current pos")
       return [];
     }
 
@@ -215,10 +221,8 @@ export class RecruiterSearchOrPipelinePageScrape {
         ".row-description-entry__date-duration"
       );
 
-      if (
-        !posDateElem ||
-        !posDateElem.textContent.toLowerCase().includes("present")
-      ) {
+      if (!posDateElem || !posDateElem.textContent.toLowerCase().includes("present")) {
+        // console.debug("didn't find present")
         return;
       }
 
@@ -227,12 +231,14 @@ export class RecruiterSearchOrPipelinePageScrape {
 
       // There can be multiple "at" in postition title giving multiple companies - returning the last campany
       const company = postSplit[postSplit.length - 1];
+      // console.debug("the company", company)
 
       const names = GenerateNamesForCompay(company, this.location);
 
       companies = companies.concat(names);
     });
 
+    // console.debug("the companies", companies)
     return companies;
   }
 }
